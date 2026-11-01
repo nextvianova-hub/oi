@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: tea-country morning. Photo hero of the tea fields and arched rail bridge,
+/* Layout: tea-country morning. Misty layered hills with the arched rail bridge as the hero,
    then a calm single column of rooms, booking and nearby places. */
 :root{
   --bg:#F4F6F2;
@@ -70,22 +70,23 @@ nav.top ul a:hover{color:var(--ink)}
 
 /* Hero */
 .hero{position:relative;border-radius:22px;overflow:hidden;background:linear-gradient(180deg,var(--sky-a),var(--sky-b))}
-.hero img.scene{display:block;width:100%;height:auto;aspect-ratio:16/9;max-width:100%;object-fit:cover}
-.hero-copy{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:clamp(20px,5vw,56px);background:linear-gradient(90deg,rgba(12,22,16,.74) 0%,rgba(12,22,16,.45) 45%,rgba(12,22,16,0) 75%)}
-.hero-copy>*{max-width:600px}
-.hero-copy .label{color:#F6C7A6}
-.hero-copy h1{font-size:clamp(34px,6vw,66px);color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.25)}
-.hero-copy p{margin-top:12px;font-size:clamp(15px,1.8vw,19px);color:rgba(255,255,255,.9);max-width:30em}
-.hero-copy .btn-main{background:#2F6141;color:#fff}
+.hero svg.scene{display:block;width:100%;height:auto;aspect-ratio:1200/690;max-width:100%}
+.hill1{fill:var(--hill-1)}.hill2{fill:var(--hill-2)}.hill3{fill:var(--hill-3)}.hill4{fill:var(--hill-4)}
+.mist{fill:var(--mist)}
+.bridge{fill:var(--hill-4)}
+.rows{stroke:var(--hill-2);stroke-width:2;fill:none;opacity:.55}
+.train{fill:var(--clay)}
+.train-g{animation:ride 22s linear infinite}
+@keyframes ride{from{transform:translateX(-260px)}to{transform:translateX(1260px)}}
+@media (prefers-reduced-motion:reduce){.train-g{animation:none;transform:translateX(520px)}}
+.hero-copy{position:absolute;left:0;top:0;padding:clamp(20px,5vw,56px);max-width:620px}
+.hero-copy h1{font-size:clamp(34px,6vw,66px);color:var(--ink)}
+.hero-copy p{margin-top:12px;font-size:clamp(15px,1.8vw,19px);color:var(--muted);max-width:30em}
 .hero-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
 @media (max-width:640px){
   .hero{display:flex;flex-direction:column}
-  .hero{background:var(--surface);border:1px solid var(--line)}
-  .hero img.scene{aspect-ratio:4/3;order:2}
-  .hero-copy{position:static;padding:24px 20px 20px;background:none}
-  .hero-copy .label{color:var(--clay)}
-  .hero-copy h1{color:var(--ink);text-shadow:none}
-  .hero-copy p{color:var(--muted)}
+  .hero svg.scene{aspect-ratio:1200/560}
+  .hero-copy{position:static;padding:24px 20px 4px}
 }
 
 .facts{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:20px;background:var(--surface);border:1px solid var(--line);border-radius:16px}
@@ -104,7 +105,7 @@ section{padding-block:64px}
 .rooms{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .room{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
 .room .pic{aspect-ratio:4/3;max-width:100%;position:relative;overflow:hidden}
-.room .pic img{width:100%;height:100%;display:block;object-fit:cover}
+.room .pic svg{width:100%;height:100%;display:block}
 .room .body{padding:18px 20px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
 .room h3{font-size:24px}
 .room p{color:var(--muted);font-size:15px}
@@ -116,16 +117,6 @@ section{padding-block:64px}
 .room button{margin-top:6px}
 @media (max-width:900px){.rooms{grid-template-columns:1fr 1fr}.room:last-child{grid-column:span 2}}
 @media (max-width:600px){.rooms{grid-template-columns:1fr}.room:last-child{grid-column:auto}}
-
-/* Breakfast */
-.bfast{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(20px,4vw,48px);align-items:center}
-.bfast img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:18px;display:block}
-.bfast h2{font-size:clamp(28px,4vw,40px);margin:6px 0 12px}
-.bfast p{color:var(--muted)}
-.bf-list{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:8px}
-.bf-list li{padding-left:22px;position:relative;font-size:15px}
-.bf-list li::before{content:"";position:absolute;left:0;top:.55em;width:10px;height:10px;border-radius:50%;background:var(--tea)}
-@media (max-width:760px){.bfast{grid-template-columns:1fr}}
 
 /* Booking */
 .book{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px}
@@ -198,7 +189,31 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
         <a class="btn btn-line" href="#rooms">See rooms</a>
       </div>
     </div>
-    <img class="scene" src="images/hero.jpg" alt="Tea fields and a train crossing an arched bridge near Ella at sunrise" width="1600" height="893">
+    <svg class="scene" viewBox="0 -170 1200 690" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <path class="hill1" d="M0 300 C150 240 260 250 380 280 S620 220 760 250 1000 200 1200 240 V520 H0Z"/>
+      <ellipse class="mist" cx="300" cy="300" rx="320" ry="26" opacity=".55"/>
+      <path class="hill2" d="M0 360 C120 320 240 330 340 350 S560 300 700 330 960 290 1200 320 V520 H0Z"/>
+      <g class="bridge">
+        <rect x="620" y="352" width="400" height="12"/>
+        <path d="M620 364h400v76H620Z M642 440a20 30 0 0 1 40 0Z"/>
+      </g>
+      <g fill="var(--hill-2)">
+        <path d="M640 440v-46a22 26 0 0 1 44 0v46Z"/><path d="M698 440v-46a22 26 0 0 1 44 0v46Z"/><path d="M756 440v-46a22 26 0 0 1 44 0v46Z"/>
+        <path d="M814 440v-46a22 26 0 0 1 44 0v46Z"/><path d="M872 440v-46a22 26 0 0 1 44 0v46Z"/><path d="M930 440v-46a22 26 0 0 1 44 0v46Z"/>
+      </g>
+      <g class="train-g">
+        <g class="train">
+          <rect x="0" y="328" width="58" height="22" rx="4"/><rect x="62" y="330" width="54" height="20" rx="3"/><rect x="120" y="330" width="54" height="20" rx="3"/>
+        </g>
+        <g fill="var(--sky-b)"><rect x="8" y="333" width="10" height="7"/><rect x="70" y="334" width="9" height="6"/><rect x="86" y="334" width="9" height="6"/><rect x="128" y="334" width="9" height="6"/><rect x="144" y="334" width="9" height="6"/></g>
+      </g>
+      <path class="hill3" d="M0 420 C160 380 300 400 420 420 S600 430 640 440 H1200 V520 H0Z"/>
+      <g class="rows">
+        <path d="M0 450 C150 420 300 436 460 452"/><path d="M0 470 C160 444 320 458 520 474"/><path d="M0 492 C180 468 360 480 600 496"/>
+      </g>
+      <path class="hill4" d="M0 500 C240 470 520 480 760 470 S1050 460 1200 470 V520 H0Z"/>
+      <ellipse class="mist" cx="900" cy="470" rx="360" ry="18" opacity=".35"/>
+    </svg>
   </div>
 
   <div class="facts">
@@ -214,16 +229,6 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
       <p>Every room has hot water, a mosquito net and a private bathroom. Prices are per room, per night, with breakfast.</p>
     </div>
     <div class="rooms" id="roomList"></div>
-  </section>
-
-  <section id="breakfast" class="bfast">
-    <img src="images/breakfast.jpg" alt="String hoppers, dhal, coconut sambol, fruit and Ceylon tea on a balcony table" loading="lazy" width="900" height="675">
-    <div>
-      <span class="label">Breakfast included</span>
-      <h2>Breakfast on the balcony</h2>
-      <p>Every stay includes a home-cooked breakfast: string hoppers with dhal and coconut sambol, fresh papaya and bananas from the garden, and a pot of Ceylon tea from the estate next door. Prefer eggs and toast? Just tell us the night before.</p>
-      <ul class="bf-list"><li>Served 7:00 – 10:00 am</li><li>Early packed breakfast for sunrise hikes</li><li>Vegetarian and vegan on request</li></ul>
-    </div>
   </section>
 
   <section id="book">
@@ -306,11 +311,11 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   const USD_RATE = 300; // approximate LKR per USD, for display only
   const ROOMS = [
     {id:"garden",name:"Garden Double",lkr:9500,max:2,desc:"Ground-floor room opening onto the flower garden. Quiet and cool.",amen:["Queen bed","Garden door","Hot water"],
-     img:"images/room-garden.jpg"},
+     tint:["#BFD6B8","#6E977A"]},
     {id:"valley",name:"Valley View Deluxe",lkr:14500,max:2,desc:"Upstairs room with a private balcony facing Ella Gap. Our most booked room.",amen:["King bed","Balcony","Valley view"],
-     img:"images/room-valley.jpg"},
+     tint:["#CFE0E6","#3F6B4E"]},
     {id:"family",name:"Family Room",lkr:18000,max:4,desc:"Two connected rooms for families or friends, with a shared sitting area.",amen:["Sleeps 4","2 bathrooms","Sitting area"],
-     img:"images/room-family.jpg"}
+     tint:["#E6D9C4","#B0522D"]}
   ];
   const lkr = n => "LKR " + n.toLocaleString("en-US");
   const list = document.getElementById("roomList");
@@ -319,7 +324,17 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   ROOMS.forEach((r,i)=>{
     const art = document.createElement("article"); art.className="room";
     art.innerHTML = `
-      <div class="pic"><img src="${r.img}" alt="${r.name}" loading="lazy" width="800" height="600"></div>
+      <div class="pic" aria-hidden="true">
+        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+          <rect width="400" height="300" fill="${r.tint[0]}"/>
+          <path d="M0 210 C90 170 170 190 250 175 S360 160 400 170 V300 H0Z" fill="${r.tint[1]}" opacity=".55"/>
+          <rect x="${60+i*20}" y="60" width="140" height="110" rx="4" fill="#FFFFFF" opacity=".6"/>
+          <path d="M${130+i*20} 60v110M${60+i*20} 115h140" stroke="${r.tint[1]}" stroke-width="4" opacity=".6"/>
+          <rect x="40" y="200" width="${i===2?320:230}" height="58" rx="8" fill="#FFFFFF" opacity=".85"/>
+          <rect x="52" y="186" width="70" height="26" rx="8" fill="${r.tint[1]}" opacity=".5"/>
+          <rect x="${i===2?250:150}" y="186" width="70" height="26" rx="8" fill="${r.tint[1]}" opacity=".5"/>
+        </svg>
+      </div>
       <div class="body">
         <h3>${r.name}</h3>
         <p>${r.desc}</p>
