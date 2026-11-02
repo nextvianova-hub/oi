@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="si">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -225,7 +225,7 @@ footer.site .admin-link{background:none;border:0;color:#7E7058;text-decoration:u
 [data-act="rep-csv"],[data-act="rep-print"]{display:none!important}
 .demo-hint{margin:8px 0 0;padding:8px 10px;border:1px dashed var(--gold,#C9A24A);border-radius:8px;font-size:.9rem}</style>
 <div class="demo-bar">Demo app by Nextvia Nova. Honeycrumb is a fictional bakery: orders are not real. Owner login: demo / demo1234 <button type="button" onclick="window.__resetDemo()">Reset demo</button></div>
-<div id="app"><div class="loading"><div><div class="spinner"></div>මෙනුව පූරණය වෙමින්...</div></div></div>
+<div id="app"><div class="loading"><div><div class="spinner"></div>Loading menu...</div></div></div>
 <script>
 /* Demo backend: replaces Supabase with an in-browser store so the app runs without a server.
    Orders and menu edits stay in this viewer's browser only. */
@@ -502,8 +502,8 @@ ta:{
   status:{new:"புதியது",making:"தயாரிக்கிறது",ready:"தயார்",done:"வழங்கப்பட்டது",cancel:"ரத்து"},
   weights:{"0.5":"500 கி","1":"1 கிலோ","1.5":"1.5 கிலோ","2":"2 கிலோ"}
 }};
-let LANG = "si";
-try{ const saved = localStorage.getItem("bc-lang"); if(T[saved]) LANG = saved; }catch(e){}
+let LANG = "en";
+try{ const saved = localStorage.getItem("hc-lang"); if(T[saved]) LANG = saved; }catch(e){}
 function t(key, vars){
   let s = (T[LANG][key] ?? T.si[key] ?? key);
   if(vars) for(const k in vars) s = s.split("{"+k+"}").join(vars[k]);
@@ -512,7 +512,7 @@ function t(key, vars){
 function setLang(l){
   if(!T[l]) return;
   LANG = l;
-  try{ localStorage.setItem("bc-lang", l); }catch(e){}
+  try{ localStorage.setItem("hc-lang", l); }catch(e){}
   document.documentElement.lang = l;
 }
 document.documentElement.lang = LANG;

@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 30 30%27%3E%3Cpath d=%27M15 1C16.2 10 20 13.8 29 15 20 16.2 16.2 20 15 29 13.8 20 10 16.2 1 15 10 13.8 13.8 10 15 1Z%27 fill=%27%23E8A13A%27/%3E%3C/svg%3E">
+<title>Fernhill Cleaning Co.</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Demo website for a fictional home cleaning company: instant price quote, online booking and service-area check. Built by Nextvia Nova.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&display=swap">
+<style>
+/* Layout: the quote calculator is the hero. Spruce ink on cool white, lemon highlight
+   for prices and calls to action, one wide column with a sticky quote summary. */
+:root{
+  --bg:#F3F7F6;
+  --surface:#FFFFFF;
+  --ink:#12302B;
+  --muted:#58706B;
+  --line:#D5E2DF;
+  --spruce:#1F6F62;
+  --spruce-soft:#E2F0EC;
+  --lemon:#F4D64E;
+  --lemon-ink:#3B3000;
+  --coral:#D9573B;
+  --f-display:"Familjen Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-body:"Nunito Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D1A18;--surface:#13241F;--ink:#E4EFEC;--muted:#97AFA9;--line:#22372F;--spruce:#6FC7B4;--spruce-soft:#16302A;--lemon:#F4D64E;--lemon-ink:#2A2200;--coral:#F08A70;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1A18;--surface:#13241F;--ink:#E4EFEC;--muted:#97AFA9;--line:#22372F;--spruce:#6FC7B4;--spruce-soft:#16302A;--lemon:#F4D64E;--lemon-ink:#2A2200;--coral:#F08A70;color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1120px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--spruce);outline-offset:2px;border-radius:6px}
+.kicker{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--spruce)}
+
+.demo{margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));
+  padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));background:var(--ink);color:var(--bg);font-size:13px;text-align:center}
+
+/* nav */
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:16px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:22px;text-decoration:none}
+.logo svg{width:34px;height:34px;flex:none}
+.nav ul{display:flex;gap:24px;list-style:none;margin:0;padding:0;font-weight:700;font-size:15px}
+.nav ul a{text-decoration:none;color:var(--muted)}
+.nav ul a:hover{color:var(--ink)}
+.phone{font-weight:800;text-decoration:none;white-space:nowrap}
+@media (max-width:820px){.nav ul{display:none}}
+@media (max-width:420px){.phone{display:none}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:800 16px/1 var(--f-body);padding:15px 22px;border-radius:12px;border:1.5px solid transparent;cursor:pointer;text-decoration:none;transition:transform .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn-lemon{background:var(--lemon);color:var(--lemon-ink)}
+.btn-ink{background:var(--ink);color:var(--bg)}
+.btn-line{border-color:var(--line);background:var(--surface)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1fr 1.15fr;gap:48px;align-items:start;padding-block:28px 56px}
+.hero h1{font-size:clamp(40px,5.6vw,66px);margin-top:12px}
+.hero h1 mark{background:linear-gradient(transparent 58%,var(--lemon) 58%,var(--lemon) 92%,transparent 92%);color:inherit;padding:0 .08em}
+.hero .lede{font-size:19px;color:var(--muted);margin-top:18px;max-width:30em}
+.trust{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px;list-style:none;padding:0}
+.trust li{display:flex;gap:10px;align-items:flex-start;font-size:15px;font-weight:700}
+.trust svg{width:22px;height:22px;flex:none;color:var(--spruce);margin-top:1px}
+.stars{display:flex;align-items:center;gap:10px;margin-top:26px;font-size:14px;color:var(--muted)}
+.stars b{color:var(--ink);font-size:16px}
+.stars span.s{color:#E0A800;letter-spacing:2px;font-size:18px}
+@media (max-width:920px){.hero{grid-template-columns:1fr;gap:32px}}
+
+/* quote card */
+.quote{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:0 1px 2px rgba(18,48,43,.05),0 18px 40px rgba(18,48,43,.08);overflow:hidden;min-width:0}
+.q-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:20px 24px;border-bottom:1px solid var(--line)}
+.q-head h2{font-size:22px}
+.steps{display:flex;gap:6px;font-size:12px;font-weight:800;color:var(--muted)}
+.steps span{padding:4px 10px;border-radius:999px;background:var(--bg);white-space:nowrap}
+@media (max-width:440px){.steps{display:none}}
+.steps span.on{background:var(--spruce);color:var(--bg)}
+.q-body{padding:22px 24px;display:grid;gap:20px}
+.q-body>*,.hero>*{min-width:0}
+.q-label{font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:block}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.seg button{border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 10px;cursor:pointer;text-align:left;display:grid;gap:2px;min-width:0}
+.seg button b{font-size:15px}
+.seg button small{font-size:12.5px;color:var(--muted);line-height:1.3}
+.seg button[aria-pressed="true"]{border-color:var(--spruce);background:var(--spruce-soft);box-shadow:inset 0 0 0 1px var(--spruce)}
+.seg.freq{grid-template-columns:repeat(4,1fr)}
+.seg.freq button{text-align:center}
+.seg.freq button[disabled]{opacity:.4;cursor:not-allowed}
+@media (max-width:520px){.seg{grid-template-columns:1fr}.seg.freq{grid-template-columns:1fr 1fr}}
+.counters{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:12px}
+@media (max-width:520px){.counters{grid-template-columns:1fr 1fr}.counters .sq{grid-column:1/-1}}
+.counter{display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--line);border-radius:12px;padding:6px}
+.counter button{width:36px;height:36px;border-radius:9px;border:0;background:var(--bg);font-size:20px;font-weight:800;cursor:pointer;line-height:1}
+.counter output{font-weight:800;font-size:18px;font-variant-numeric:tabular-nums}
+select.sel,input.inp{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px;background:var(--surface);font-size:16px;min-width:0}
+.extras{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:999px;padding:8px 13px;font-size:14px;font-weight:700;cursor:pointer;background:var(--surface)}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip:has(input:checked){border-color:var(--spruce);background:var(--spruce-soft)}
+.chip:has(input:focus-visible){outline:2px solid var(--spruce);outline-offset:2px}
+.chip em{font-style:normal;color:var(--muted);font-weight:600}
+.q-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding:18px 24px;background:var(--ink);color:var(--bg)}
+.price{font-family:var(--f-display);font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.price small{font-family:var(--f-body);font-size:14px;opacity:.75;margin-left:6px;font-weight:600}
+.price-sub{font-size:13.5px;opacity:.8;margin-top:6px}
+.save{display:inline-block;background:var(--lemon);color:var(--lemon-ink);font-size:12px;font-weight:800;padding:2px 8px;border-radius:999px;margin-left:6px}
+
+/* booking step */
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+.day{flex:none;width:64px;border:1.5px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;background:var(--surface)}
+.day small{display:block;font-size:11.5px;font-weight:800;color:var(--muted);text-transform:uppercase}
+.day b{font-size:20px;font-family:var(--f-display)}
+.day[aria-pressed="true"]{border-color:var(--spruce);background:var(--spruce-soft);box-shadow:inset 0 0 0 1px var(--spruce)}
+.day[disabled]{opacity:.35;cursor:not-allowed}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.slot{border:1.5px solid var(--line);border-radius:12px;padding:11px;font-weight:800;cursor:pointer;background:var(--surface);text-align:center}
+.slot small{display:block;font-weight:600;font-size:12px;color:var(--muted)}
+.slot[aria-pressed="true"]{border-color:var(--spruce);background:var(--spruce-soft);box-shadow:inset 0 0 0 1px var(--spruce)}
+.slot[disabled]{opacity:.4;cursor:not-allowed;text-decoration:line-through}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.grid2{grid-template-columns:1fr}}
+.err{color:var(--coral);font-size:14px;font-weight:700;min-height:1.2em}
+.back{background:none;border:0;color:var(--bg);opacity:.8;font-weight:700;cursor:pointer;text-decoration:underline}
+.done{padding:28px 24px;display:grid;gap:14px;text-align:center;justify-items:center}
+.done .tick{width:64px;height:64px;border-radius:50%;background:var(--spruce-soft);display:grid;place-items:center;color:var(--spruce)}
+.done .tick svg{width:34px;height:34px}
+.done dl{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;text-align:left;margin:6px 0 0;font-size:15px;background:var(--bg);padding:14px 18px;border-radius:12px;width:100%;max-width:420px}
+.done dt{color:var(--muted)}
+.done dd{margin:0;font-weight:700}
+.done .note{font-size:13px;color:var(--muted)}
+
+/* photo band */
+.band{position:relative;border-radius:24px;overflow:hidden;margin-bottom:56px}
+.band img{display:block;width:100%;height:auto;aspect-ratio:16/8;object-fit:cover;max-width:100%}
+.band figcaption{position:absolute;left:20px;bottom:20px;display:flex;flex-wrap:wrap;gap:8px}
+.band figcaption span{background:rgba(255,255,255,.92);color:#12302B;font-weight:800;font-size:14px;padding:8px 14px;border-radius:999px}
+.band figcaption span:first-child{background:var(--lemon);color:var(--lemon-ink)}
+@media (max-width:600px){.band img{aspect-ratio:4/3}.band figcaption{left:12px;bottom:12px}.band figcaption span{font-size:12.5px;padding:6px 11px}}
+.svc{display:grid;grid-template-columns:1fr 1.35fr;gap:20px;align-items:start}
+.svc>*{min-width:0}
+.svc figure{margin:0;border-radius:16px;overflow:hidden;background:var(--surface);border:1px solid var(--line)}
+.svc figure img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;max-width:100%}
+.svc figcaption{padding:10px 14px;font-size:14px;color:var(--muted)}
+@media (max-width:860px){.svc{grid-template-columns:1fr}}
+.how-wrap{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
+.how-wrap>*{min-width:0}
+.how-wrap img{display:block;width:100%;height:100%;min-height:280px;object-fit:cover;border-radius:16px;max-width:100%}
+.how-wrap .how{grid-template-columns:1fr}
+@media (max-width:860px){.how-wrap{grid-template-columns:1fr}.how-wrap img{height:auto;aspect-ratio:4/3;min-height:0}}
+
+/* sections */
+section{padding-block:64px;border-top:1px solid var(--line)}
+.head{display:grid;grid-template-columns:1fr 1.1fr;gap:28px;align-items:end;margin-bottom:32px}
+.head h2{font-size:clamp(30px,4vw,44px);margin-top:8px}
+.head p{color:var(--muted)}
+@media (max-width:760px){.head{grid-template-columns:1fr;gap:10px}}
+
+/* compare table */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:9px 16px;font-weight:800;cursor:pointer;font-size:15px}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.cmp-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+table.cmp{width:100%;border-collapse:collapse;min-width:520px;font-size:15px}
+.cmp th,.cmp td{padding:12px 16px;border-bottom:1px solid var(--line);text-align:center}
+.cmp th:first-child,.cmp td:first-child{text-align:left}
+.cmp thead th{font-family:var(--f-display);font-size:16px;background:var(--bg)}
+.cmp tr:last-child td{border-bottom:0}
+.yes{color:var(--spruce);font-weight:800}
+.no{color:var(--muted);opacity:.6}
+
+/* how + area */
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;list-style:none;padding:0;margin:0;counter-reset:h}
+.how li{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;counter-increment:h;min-width:0}
+.how li::before{content:"Step " counter(h);display:block;font-size:12.5px;font-weight:800;color:var(--spruce);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.how h3{font-size:21px;margin-bottom:6px}
+.how p{color:var(--muted);font-size:15.5px}
+@media (max-width:760px){.how{grid-template-columns:1fr}}
+
+.area{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:stretch}
+.area>*{min-width:0}
+.zip{background:var(--ink);color:var(--bg);border-radius:20px;padding:28px;display:grid;gap:14px;align-content:start}
+.zip h3{font-size:26px}
+.zip p{opacity:.8}
+.zip form{display:flex;gap:8px}
+.zip input{flex:1;min-width:0;width:100%;border-radius:12px;border:0;padding:14px;font-size:18px;font-weight:700;letter-spacing:.08em;background:var(--bg);color:var(--ink)}
+.zip-res{font-weight:800;min-height:1.6em}
+.zip-res.ok{color:var(--lemon)}
+.zip-res.bad{color:#FFB4A2}
+.hoods{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;min-width:0}
+.hoods ul{columns:2;column-gap:20px;padding:0;margin:12px 0 0;list-style:none;font-size:15px}
+.hoods li{padding:4px 0;break-inside:avoid}
+.hoods li span{color:var(--muted);font-variant-numeric:tabular-nums}
+@media (max-width:760px){.area{grid-template-columns:1fr}}
+
+/* reviews */
+.revs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.rev{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.rev .s{color:#E0A800;letter-spacing:2px}
+.rev p{font-size:15.5px}
+.rev footer{margin-top:auto;font-size:14px;color:var(--muted)}
+.rev footer b{color:var(--ink)}
+.sample{font-size:12px;font-weight:800;color:var(--coral);letter-spacing:.06em;text-transform:uppercase}
+@media (max-width:860px){.revs{grid-template-columns:1fr}}
+
+/* faq */
+.faq{display:grid;gap:10px;max-width:820px}
+.faq details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 20px}
+.faq summary{cursor:pointer;font-weight:800;padding:14px 0;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:22px;line-height:1;color:var(--spruce)}
+.faq details[open] summary::after{content:"–"}
+.faq details p{padding:0 0 16px;color:var(--muted)}
+
+.cta{background:var(--lemon);color:var(--lemon-ink);border-radius:24px;padding:36px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;margin-block:8px 64px}
+.cta h2{font-size:clamp(26px,3.6vw,38px);max-width:18em}
+footer.site{border-top:1px solid var(--line);padding-block:24px 40px;font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}}
+</style>
+
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="demo"><b>Demo website.</b> Fernhill Cleaning Co. is a fictional business. Prices, reviews and bookings are samples. Built by Nextvia Nova.</div>
+
+<div class="wrap">
+  <nav class="nav" aria-label="Main">
+    <a class="logo" href="#top" aria-label="Fernhill Cleaning Co. home">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="10" fill="var(--spruce)"/><path d="M17 7c-5 5-7 9-7 13a7 7 0 0 0 14 0c0-4-2-8-7-13Z" fill="var(--lemon)"/><path d="M17 13v15M17 19l-3.5-3M17 23l4-3.5" stroke="var(--spruce)" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>
+      Fernhill
+    </a>
+    <ul>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#area">Service area</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a class="phone" href="#quote">(503) 555-0142</a>
+  </nav>
+
+  <main id="top">
+    <div class="hero">
+      <div>
+        <span class="kicker">Home cleaning · Portland, OR</span>
+        <h1>A spotless home, <mark>booked in 60 seconds</mark></h1>
+        <p class="lede">Pick your home size, see your exact price, and choose a time that suits you. Friendly, vetted cleaners who bring all their own supplies.</p>
+        <ul class="trust">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>Insured and background-checked</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Same-week availability</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l5 5L20 6"/></svg>24-hour re-clean guarantee</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 21c-2-3-2-7 0-10l5-7 5 7c2 3 2 7 0 10z"/></svg>Pet-safe, low-scent products</li>
+        </ul>
+        <div class="stars"><span class="s" aria-hidden="true">★★★★★</span><span><b>4.9</b> average from 300+ sample reviews</span></div>
+      </div>
+
+      <div class="quote" id="quote" aria-live="polite">
+        <div class="q-head">
+          <h2 id="q-title">Get your instant price</h2>
+          <div class="steps" aria-hidden="true"><span id="st1" class="on">1 Price</span><span id="st2">2 Book</span></div>
+        </div>
+
+        <!-- step 1 -->
+        <div id="step1">
+          <div class="q-body">
+            <div>
+              <span class="q-label" id="lbl-type">Type of clean</span>
+              <div class="seg" role="group" aria-labelledby="lbl-type" id="type"></div>
+            </div>
+            <div>
+              <span class="q-label">Home size</span>
+              <div class="counters">
+                <div><span class="q-label" id="lbl-bed" style="font-size:12px">Bedrooms</span>
+                  <div class="counter" aria-labelledby="lbl-bed"><button type="button" data-c="bed" data-d="-1" aria-label="Fewer bedrooms">−</button><output id="o-bed">2</output><button type="button" data-c="bed" data-d="1" aria-label="More bedrooms">+</button></div></div>
+                <div><span class="q-label" id="lbl-bath" style="font-size:12px">Bathrooms</span>
+                  <div class="counter" aria-labelledby="lbl-bath"><button type="button" data-c="bath" data-d="-1" aria-label="Fewer bathrooms">−</button><output id="o-bath">1</output><button type="button" data-c="bath" data-d="1" aria-label="More bathrooms">+</button></div></div>
+                <div class="sq"><label class="q-label" for="sqft" style="font-size:12px">Square feet</label>
+                  <select class="sel" id="sqft"><option value="0">Under 1,000</option><option value="1" selected>1,000 – 1,500</option><option value="2">1,500 – 2,000</option><option value="3">2,000 – 2,500</option><option value="4">2,500 – 3,500</option><option value="5">Over 3,500</option></select></div>
+              </div>
+            </div>
+            <div>
+              <span class="q-label" id="lbl-freq">How often?</span>
+              <div class="seg freq" role="group" aria-labelledby="lbl-freq" id="freq"></div>
+            </div>
+            <div>
+              <span class="q-label">Extras</span>
+              <div class="extras" id="extras"></div>
+            </div>
+          </div>
+          <div class="q-foot">
+            <div>
+              <div class="price" id="price">$0<small id="per">per clean</small></div>
+              <div class="price-sub" id="price-sub"></div>
+            </div>
+            <button class="btn btn-lemon" type="button" id="to-book">Choose a time →</button>
+          </div>
+        </div>
+
+        <!-- step 2 -->
+        <div id="step2" hidden>
+          <div class="q-body">
+            <div>
+              <span class="q-label" id="lbl-day">Pick a day</span>
+              <div class="days" role="group" aria-labelledby="lbl-day" id="days"></div>
+            </div>
+            <div>
+              <span class="q-label" id="lbl-slot">Arrival window</span>
+              <div class="slots" role="group" aria-labelledby="lbl-slot" id="slots"></div>
+            </div>
+            <div class="grid2">
+              <div><label class="q-label" for="b-name">Full name</label><input class="inp" id="b-name" autocomplete="name" placeholder="Jordan Lee"></div>
+              <div><label class="q-label" for="b-email">Email</label><input class="inp" id="b-email" type="email" autocomplete="email" placeholder="jordan@example.com"></div>
+              <div><label class="q-label" for="b-addr">Street address</label><input class="inp" id="b-addr" autocomplete="street-address" placeholder="1234 SE Ash St"></div>
+              <div><label class="q-label" for="b-zip">ZIP code</label><input class="inp" id="b-zip" inputmode="numeric" maxlength="5" autocomplete="postal-code" placeholder="97214"></div>
+            </div>
+            <p class="err" id="b-err" role="alert"></p>
+          </div>
+          <div class="q-foot">
+            <div>
+              <div class="price" id="price2">$0</div>
+              <div class="price-sub"><button class="back" type="button" id="back">← Change details</button></div>
+            </div>
+            <button class="btn btn-lemon" type="button" id="confirm">Request booking</button>
+          </div>
+        </div>
+
+        <!-- step 3 -->
+        <div id="step3" hidden>
+          <div class="done">
+            <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+            <h2 style="font-size:26px">You are all set, <span id="d-name"></span></h2>
+            <p>We will confirm your booking by email within one hour.</p>
+            <dl id="d-list"></dl>
+            <p class="note">Demo only: no booking was sent and no card was charged.</p>
+            <button class="btn btn-line" type="button" id="again">Start a new quote</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <figure class="band">
+      <img src="images/fh-living.jpg" alt="Bright, freshly cleaned living room with grey sofa and big windows" width="1600" height="893">
+      <figcaption><span>After a Fernhill deep clean</span><span>3 bed · 2 bath · 2 cleaners · 4 hours</span></figcaption>
+    </figure>
+
+    <section id="services">
+      <div class="head">
+        <div><span class="kicker">What is included</span><h2>Standard, deep or move-out?</h2></div>
+        <p>Every clean covers the whole home. A deep clean adds the detail work that builds up over months; a move-out clean gets an empty home ready for the next people.</p>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Rooms" id="room-tabs"></div>
+      <div class="svc">
+        <figure><img id="room-img" src="images/fh-kitchen.jpg" alt="Spotless white kitchen with quartz countertops" width="900" height="675"><figcaption id="room-cap">Kitchen after a standard clean</figcaption></figure>
+        <div class="cmp-wrap"><table class="cmp" id="cmp"></table></div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="head">
+        <div><span class="kicker">How it works</span><h2>Clean home, zero hassle</h2></div>
+        <p>No phone tag and no surprise fees. You see the full price before you book, and pay only after the clean is done.</p>
+      </div>
+      <div class="how-wrap">
+      <img src="images/fh-team.jpg" alt="Two cleaners in green aprons cleaning a bright kitchen" width="1000" height="750" loading="lazy">
+      <ol class="how">
+        <li><h3>Book online</h3><p>Get your price and choose a two-hour arrival window that suits you.</p></li>
+        <li><h3>We clean</h3><p>A vetted team arrives with supplies and follows a 50-point checklist.</p></li>
+        <li><h3>Relax</h3><p>Not happy with a spot? Tell us within 24 hours and we come back for free.</p></li>
+      </ol>
+      </div>
+    </section>
+
+    <section id="area">
+      <div class="head">
+        <div><span class="kicker">Service area</span><h2>Do we clean in your neighborhood?</h2></div>
+        <p>We serve most of Portland and the inner suburbs. Enter your ZIP code to check.</p>
+      </div>
+      <div class="area">
+        <div class="zip">
+          <h3>Check your ZIP code</h3>
+          <p>Try 97214 or 97035.</p>
+          <form id="zip-form" novalidate>
+            <input id="zip-in" inputmode="numeric" maxlength="5" placeholder="ZIP" aria-label="ZIP code">
+            <button class="btn btn-lemon" type="submit">Check</button>
+          </form>
+          <p class="zip-res" id="zip-res" role="status"></p>
+        </div>
+        <div class="hoods">
+          <span class="kicker">Neighborhoods we cover</span>
+          <ul id="hoods"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews">
+      <div class="head">
+        <div><span class="kicker">Reviews</span><h2>What customers say</h2></div>
+        <p><span class="sample">Sample reviews</span><br>These are placeholder reviews for the demo. A real site would pull live reviews from Google.</p>
+      </div>
+      <div class="revs">
+        <article class="rev"><span class="s" aria-label="5 stars">★★★★★</span><p>Booking took a minute and the price was exactly what the site said. The kitchen has not looked this good since we moved in.</p><footer><b>Sample customer</b> · Deep clean, 3 bed</footer></article>
+        <article class="rev"><span class="s" aria-label="5 stars">★★★★★</span><p>We switched to every two weeks. Same two cleaners each time, they remember how we like things, and the dog loves them.</p><footer><b>Sample customer</b> · Biweekly, 2 bed</footer></article>
+        <article class="rev"><span class="s" aria-label="5 stars">★★★★★</span><p>Move-out clean got our full deposit back. They even did inside the oven and fridge without me having to ask twice.</p><footer><b>Sample customer</b> · Move-out, 1 bed</footer></article>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="head">
+        <div><span class="kicker">FAQ</span><h2>Good questions</h2></div>
+        <p>Anything else? Call us at (503) 555-0142.</p>
+      </div>
+      <div class="faq">
+        <details open><summary>Do I need to be home?</summary><p>No. Most customers leave a key or a door code. We note it securely and lock up when we leave.</p></details>
+        <details><summary>Do you bring your own supplies?</summary><p>Yes. We bring vacuums, mops and pet-safe, low-scent products. If you prefer your own products, just leave them out.</p></details>
+        <details><summary>When do I pay?</summary><p>We hold your card when you book and charge it only after the clean is finished.</p></details>
+        <details><summary>Can I reschedule or cancel?</summary><p>Yes, free of charge up to 24 hours before your arrival window.</p></details>
+        <details><summary>What if I am not happy?</summary><p>Tell us within 24 hours and we will come back to re-clean the areas you are not happy with, at no cost.</p></details>
+      </div>
+    </section>
+
+    <div class="cta">
+      <h2>Come home to a clean house this week.</h2>
+      <a class="btn btn-ink" href="#quote">Get my price</a>
+    </div>
+  </main>
+
+  <footer class="site">
+    <span>Fernhill Cleaning Co. is a demo business. No real bookings or payments.</span>
+    <span>Website by Nextvia Nova</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(id){ return document.getElementById(id); };
+  var TYPES = [
+    {id:"standard", name:"Standard", note:"Regular upkeep", mult:1},
+    {id:"deep", name:"Deep clean", note:"First visit or seasonal", mult:1.6},
+    {id:"move", name:"Move in/out", note:"Empty home", mult:1.85}
+  ];
+  var FREQ = [
+    {id:"once", name:"One time", off:0},
+    {id:"monthly", name:"Monthly", off:.10},
+    {id:"biweekly", name:"Every 2 weeks", off:.15},
+    {id:"weekly", name:"Weekly", off:.20}
+  ];
+  var EXTRAS = [
+    {id:"oven", name:"Inside oven", price:35},
+    {id:"fridge", name:"Inside fridge", price:35},
+    {id:"cabinets", name:"Inside cabinets", price:45},
+    {id:"windows", name:"Interior windows", price:40},
+    {id:"laundry", name:"Laundry & fold", price:25},
+    {id:"pets", name:"Pet hair extra", price:15}
+  ];
+  var SQFT = [0,0,20,45,80,130];
+  var st = {type:"standard", bed:2, bath:1, sqft:1, freq:"biweekly", extras:{}, day:null, slot:null};
+
+  function money(n){ return "$" + Math.round(n).toLocaleString("en-US"); }
+  function calc(){
+    var t = TYPES.filter(function(x){return x.id===st.type;})[0];
+    var base = 95 + st.bed*22 + st.bath*28 + SQFT[st.sqft];
+    var core = base * t.mult;
+    var ex = 0; EXTRAS.forEach(function(e){ if(st.extras[e.id]) ex += e.price; });
+    var f = FREQ.filter(function(x){return x.id===st.freq;})[0];
+    var off = st.type==="standard" ? f.off : 0;
+    var total = Math.round((core*(1-off) + ex)/5)*5;
+    var hours = (core + ex) / 52;
+    var crew = hours > 4 ? 3 : (hours > 2.5 ? 2 : 1);
+    var onSite = Math.max(1.5, Math.round(hours/crew*2)/2);
+    return {total:total, full:Math.round((core+ex)/5)*5, off:off, crew:crew, onSite:onSite, freq:f};
+  }
+
+  function seg(host, list, key, render){
+    host.innerHTML = "";
+    list.forEach(function(it){
+      var b = document.createElement("button"); b.type = "button";
+      b.innerHTML = render(it); b.setAttribute("aria-pressed", String(st[key]===it.id));
+      b.addEventListener("click", function(){ if(b.disabled) return; st[key] = it.id; update(); });
+      b.dataset.id = it.id; host.appendChild(b);
+    });
+  }
+  seg($("type"), TYPES, "type", function(t){ return "<b>"+t.name+"</b><small>"+t.note+"</small>"; });
+  seg($("freq"), FREQ, "freq", function(f){ return "<b>"+f.name+"</b>" + (f.off ? "<small>Save "+Math.round(f.off*100)+"%</small>" : "<small>&nbsp;</small>"); });
+  EXTRAS.forEach(function(e){
+    var l = document.createElement("label"); l.className = "chip";
+    l.innerHTML = '<input type="checkbox" id="x-'+e.id+'">'+e.name+' <em>+$'+e.price+'</em>';
+    l.querySelector("input").addEventListener("change", function(ev){ st.extras[e.id] = ev.target.checked; update(); });
+    $("extras").appendChild(l);
+  });
+  document.querySelectorAll("[data-c]").forEach(function(b){
+    b.addEventListener("click", function(){
+      var k = b.dataset.c, lim = k==="bed" ? [0,7] : [1,6];
+      st[k] = Math.min(lim[1], Math.max(lim[0], st[k] + Number(b.dataset.d))); update();
+    });
+  });
+  $("sqft").addEventListener("change", function(e){ st.sqft = Number(e.target.value); update(); });
+
+  function update(){
+    document.querySelectorAll("#type button").forEach(function(b){ b.setAttribute("aria-pressed", String(b.dataset.id===st.type)); });
+    var recurringOk = st.type === "standard";
+    if(!recurringOk) st.freq = "once";
+    document.querySelectorAll("#freq button").forEach(function(b){
+      b.setAttribute("aria-pressed", String(b.dataset.id===st.freq));
+      b.disabled = !recurringOk && b.dataset.id !== "once";
+    });
+    $("o-bed").textContent = st.bed === 0 ? "Studio" : st.bed;
+    $("o-bath").textContent = st.bath;
+    var r = calc();
+    $("price").innerHTML = money(r.total) + '<small>' + (st.freq==="once" ? "one-time" : "per clean") + '</small>' + (r.off ? '<span class="save">−'+Math.round(r.off*100)+'%</span>' : "");
+    $("price-sub").textContent = r.crew + (r.crew>1 ? " cleaners" : " cleaner") + " · about " + r.onSite + " hours on site" + (r.off ? " · first clean " + money(r.full) : "");
+    $("price2").textContent = money(r.total);
+  }
+
+  // ---- booking step ----
+  var SLOTS = [["8:00 – 10:00 am","Morning"],["11:00 am – 1:00 pm","Midday"],["2:00 – 4:00 pm","Afternoon"]];
+  function hash(s){ var h=0; for(var i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))|0; } return Math.abs(h); }
+  function iso(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+  function buildDays(){
+    var host = $("days"); host.innerHTML = "";
+    var d = new Date(); d.setHours(12,0,0,0);
+    for(var i=1;i<=14;i++){
+      var x = new Date(d); x.setDate(d.getDate()+i);
+      var k = iso(x), sun = x.getDay()===0;
+      var b = document.createElement("button"); b.type="button"; b.className="day"; b.dataset.day=k;
+      b.innerHTML = "<small>"+x.toLocaleDateString("en-US",{weekday:"short"})+"</small><b>"+x.getDate()+"</b><small>"+x.toLocaleDateString("en-US",{month:"short"})+"</small>";
+      b.disabled = sun; b.setAttribute("aria-label", x.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"}) + (sun ? ", closed" : ""));
+      b.setAttribute("aria-pressed", String(st.day===k));
+      b.addEventListener("click", function(ev){ var t=ev.currentTarget; if(t.disabled) return; st.day=t.dataset.day; st.slot=null; buildDays(); buildSlots(); });
+      host.appendChild(b);
+    }
+  }
+  function buildSlots(){
+    var host = $("slots"); host.innerHTML = "";
+    SLOTS.forEach(function(s,i){
+      var b = document.createElement("button"); b.type="button"; b.className="slot";
+      var taken = st.day ? (hash(st.day+i) % 4 === 0) : false;
+      b.innerHTML = s[1]+"<small>"+s[0]+(taken?" · full":"")+"</small>";
+      b.disabled = !st.day || taken;
+      b.setAttribute("aria-pressed", String(st.slot===i));
+      b.addEventListener("click", function(){ if(b.disabled) return; st.slot=i; buildSlots(); });
+      host.appendChild(b);
+    });
+  }
+  function show(n){
+    $("step1").hidden = n!==1; $("step2").hidden = n!==2; $("step3").hidden = n!==3;
+    $("st1").className = n===1 ? "on" : ""; $("st2").className = n>=2 ? "on" : "";
+    $("q-title").textContent = n===1 ? "Get your instant price" : n===2 ? "Choose your time" : "Booking requested";
+  }
+  $("to-book").addEventListener("click", function(){ buildDays(); buildSlots(); show(2); $("days").querySelector("button:not([disabled])").focus(); });
+  $("back").addEventListener("click", function(){ show(1); });
+
+  var ZIPS = {};
+  [["Downtown","97201","97204","97205"],["Northwest","97209","97210"],["Northeast","97211","97212","97213","97220"],["Southeast","97202","97206","97214","97215","97216"],["Southwest","97219","97221","97239"],["North Portland","97203","97217"],["Lake Oswego","97034","97035"],["Beaverton","97005","97006","97008"],["Milwaukie","97222","97267"],["Tigard","97223","97224"]].forEach(function(g){ g.slice(1).forEach(function(z){ ZIPS[z]=g[0]; }); });
+  var hoods = $("hoods");
+  [["Downtown","97201"],["Northwest","97209"],["Northeast","97211"],["Southeast","97214"],["Southwest","97219"],["North Portland","97203"],["Lake Oswego","97035"],["Beaverton","97005"],["Milwaukie","97222"],["Tigard","97223"]].forEach(function(h){
+    var li=document.createElement("li"); li.innerHTML=h[0]+' <span>'+h[1]+'…</span>'; hoods.appendChild(li); });
+
+  $("confirm").addEventListener("click", function(){
+    var name=$("b-name").value.trim(), email=$("b-email").value.trim(), addr=$("b-addr").value.trim(), zip=$("b-zip").value.trim();
+    var e="";
+    if(!st.day) e="Pick a day.";
+    else if(st.slot===null) e="Pick an arrival window.";
+    else if(!name) e="Enter your name.";
+    else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) e="Enter a valid email address.";
+    else if(!addr) e="Enter your street address.";
+    else if(!/^\d{5}$/.test(zip)) e="Enter a 5-digit ZIP code.";
+    else if(!ZIPS[zip]) e="Sorry, we do not serve ZIP "+zip+" yet. Try 97214.";
+    $("b-err").textContent = e;
+    if(e) return;
+    var r = calc(), t = TYPES.filter(function(x){return x.id===st.type;})[0];
+    var day = new Date(st.day+"T12:00:00").toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"});
+    var ex = EXTRAS.filter(function(x){return st.extras[x.id];}).map(function(x){return x.name;}).join(", ") || "None";
+    $("d-name").textContent = name.split(" ")[0];
+    var rows = [["Service", t.name + " · " + (st.bed===0?"Studio":st.bed+" bed") + ", " + st.bath + " bath"],["When", day + ", " + SLOTS[st.slot][0]],["Frequency", r.freq.name],["Extras", ex],["Address", addr + ", " + ZIPS[zip] + " " + zip],["Price", money(r.total) + (st.freq==="once" ? "" : " per clean")]];
+    $("d-list").innerHTML = "";
+    rows.forEach(function(rw){ var dt=document.createElement("dt"); dt.textContent=rw[0]; var dd=document.createElement("dd"); dd.textContent=rw[1]; $("d-list").append(dt,dd); });
+    show(3);
+  });
+  $("again").addEventListener("click", function(){ st.day=null; st.slot=null; show(1); });
+
+  $("zip-form").addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var z = $("zip-in").value.trim(), out = $("zip-res");
+    if(!/^\d{5}$/.test(z)){ out.className="zip-res bad"; out.textContent="Enter a 5-digit ZIP code."; return; }
+    if(ZIPS[z]){ out.className="zip-res ok"; out.textContent="Yes! We clean in "+ZIPS[z]+". Next opening is tomorrow."; $("b-zip").value=z; }
+    else { out.className="zip-res bad"; out.textContent="Not yet in "+z+". We are expanding soon."; }
+  });
+
+  // ---- services comparison ----
+  var ROOMS = {
+    "Kitchen":[["Wipe counters and backsplash",1,1,1],["Clean outside of appliances",1,1,1],["Clean sink and faucet",1,1,1],["Degrease stovetop and hood",0,1,1],["Wipe cabinet fronts",0,1,1],["Inside cabinets and drawers",0,0,1],["Inside oven and fridge","extra","extra",1]],
+    "Bathrooms":[["Clean toilet, tub and shower",1,1,1],["Clean mirrors and sink",1,1,1],["Mop floors",1,1,1],["Scrub grout and remove soap scum",0,1,1],["Wipe baseboards and doors",0,1,1],["Inside cabinets and vanity",0,0,1]],
+    "Living areas":[["Dust reachable surfaces",1,1,1],["Vacuum carpets and rugs",1,1,1],["Mop hard floors",1,1,1],["Make beds",1,1,0],["Baseboards, door frames, switches",0,1,1],["Window sills and blinds",0,1,1],["Interior windows","extra","extra","extra"]]
+  };
+  var tabs = $("room-tabs"), cur = "Kitchen";
+  function cell(v){ return v===1 ? '<td class="yes">✓</td>' : v==="extra" ? '<td>Add-on</td>' : '<td class="no">—</td>'; }
+  function drawCmp(){
+    $("cmp").innerHTML = '<thead><tr><th scope="col">'+cur+'</th><th scope="col">Standard</th><th scope="col">Deep</th><th scope="col">Move in/out</th></tr></thead><tbody>' +
+      ROOMS[cur].map(function(r){ return '<tr><td>'+r[0]+'</td>'+cell(r[1])+cell(r[2])+cell(r[3])+'</tr>'; }).join("") + '</tbody>';
+    tabs.querySelectorAll("button").forEach(function(b){ b.setAttribute("aria-selected", String(b.textContent===cur)); });
+    var ph = {"Kitchen":["fh-kitchen.jpg","Spotless white kitchen with quartz countertops","Kitchen after a standard clean"],"Bathrooms":["fh-bathroom.jpg","Clean bathroom with white tiles, glass shower and folded towels","Bathroom after a deep clean"],"Living areas":["fh-bedroom.jpg","Tidy bedroom with crisp white bedding and a green throw","Bedroom after a standard clean"]}[cur];
+    $("room-img").src = "images/"+ph[0]; $("room-img").alt = ph[1]; $("room-cap").textContent = ph[2];
+  }
+  Object.keys(ROOMS).forEach(function(k){ var b=document.createElement("button"); b.type="button"; b.setAttribute("role","tab"); b.textContent=k; b.addEventListener("click",function(){ cur=k; drawCmp(); }); tabs.appendChild(b); });
+  drawCmp();
+  update();
+})();
+</script>
+
+</body>
+</html>
